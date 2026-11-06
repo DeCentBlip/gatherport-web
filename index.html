@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f5ef">
+  <meta name="description" content="Gatherport brings selected Ethereum token balances into one clear USDC plan. Explore the interactive wallet consolidation demo.">
+  <meta property="og:title" content="Gatherport — Bring your tokens together.">
+  <meta property="og:description" content="A simpler view of your next wallet cleanup. Explore our interactive prototype with example data.">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:image" content="https://decentblip.github.io/gatherport-web/brand/gatherport-avatar-512.png">
+  <meta name="twitter:card" content="summary">
+  <link rel="apple-touch-icon" href="brand/gatherport-avatar-512.png">
+  <title>Gatherport — Bring your tokens together.</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='13' fill='%23d96847'/%3E%3Cg fill='none' stroke='%23fffaf3' stroke-width='4' stroke-linecap='round'%3E%3Cpath d='M10 13h7c8 0 8 11 15 11M10 24h22M10 35h7c8 0 8-11 15-11'/%3E%3C/g%3E%3Crect x='30' y='17' width='8' height='14' rx='3' fill='%23fffaf3'/%3E%3C/svg%3E">
+  <style>
+    :root{--paper:#f7f5ef;--white:#fffefa;--ink:#2b302b;--muted:#6c7169;--line:#dddcd2;--accent:#cc5737;--accent-dark:#ac4226;--peach:#f5e5d9;--sage:#e7ebdf;--sage-ink:#52624b;--error:#a92b25;--radius:24px;--shadow:0 24px 70px #343b2410}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;scroll-padding-top:28px}
+    body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+    button,input{font:inherit}
+    button,a,input,summary{-webkit-tap-highlight-color:transparent}
+    button,a{touch-action:manipulation}
+    a{color:inherit;text-underline-offset:4px}
+    button{cursor:pointer}
+    button:disabled{cursor:not-allowed;opacity:.5}
+    a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outline-offset:4px}
+    input:focus-visible{outline-offset:1px}
+    [hidden]{display:none!important}
+    svg{display:block;flex-shrink:0}
+    .wrap{width:min(1180px,calc(100% - 64px));margin-inline:auto}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    .skip-link{position:absolute;z-index:20;left:20px;top:-80px;background:var(--ink);color:white;padding:10px 18px}
+    .skip-link:focus{top:12px}
+    .site-header{height:100px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);gap:24px}
+    .brand{display:inline-flex;align-items:center;gap:10px;font-size:23px;font-weight:720;letter-spacing:-.9px;text-decoration:none;white-space:nowrap}
+    .brand-mark{color:var(--accent);width:39px;height:39px}
+    nav{display:flex;align-items:center;gap:30px}
+    nav a{font-size:13px;text-decoration:none;color:#555d52}
+    nav a:hover{color:var(--accent)}
+    .nav-button{border:1px solid #bcc0b4;border-radius:100px;padding:10px 18px;color:var(--ink)}
+    .nav-button:hover{border-color:var(--accent)}
+    .eyebrow{display:flex;align-items:center;gap:9px;font-size:10px;letter-spacing:1.8px;text-transform:uppercase;font-weight:720}
+    .dot{width:7px;height:7px;background:var(--accent);border-radius:50%;display:inline-block;flex-shrink:0}
+    .hero{display:grid;grid-template-columns:1fr 1fr;gap:76px;padding:65px 0 70px;align-items:center}
+    .hero-copy{padding:0 0 12px}
+    .hero h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(58px,6.2vw,83px);font-weight:400;line-height:1.04;letter-spacing:-4px;margin:26px 0 28px}
+    .hero h1 em{color:var(--accent);font-weight:400}
+    .hero-copy>p{font-size:17px;line-height:1.75;max-width:380px;color:var(--muted);margin:0 0 30px}
+    .hero-actions{display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+    .button{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:48px;padding:12px 23px;border:1px solid transparent;border-radius:100px;text-decoration:none;font-weight:650;font-size:13px;transition:background .15s,transform .15s}
+    .button-primary{background:var(--accent);color:var(--white)}
+    .button-primary:hover{background:var(--accent-dark)}
+    .button-dark{background:var(--ink);color:var(--white)}
+    .button-dark:hover{background:#424a3c}
+    .button-plain{background:transparent;border-color:var(--line);color:var(--ink)}
+    .button-plain:hover{background:var(--sage)}
+    .text-link{font-size:13px;font-weight:600}
+    .hero-note{font-size:11px!important;line-height:1.7!important;margin:18px 0 0!important;color:var(--muted)!important}
+    .hero-detail{display:flex;gap:15px;align-items:center;margin-top:45px;border-top:1px solid var(--line);padding-top:24px;max-width:360px}
+    .token-stack{display:flex;padding-left:0}
+    .token-stack .mini-coin{margin-left:-7px;border:3px solid var(--paper)}
+    .token-stack .mini-coin:first-child{margin-left:0}
+    .mini-coin{display:grid;place-items:center;width:37px;height:37px;border-radius:50%;font:600 13px/1 Georgia,serif}
+    .coin-blue{background:#e2e8ef;color:#53667d}
+    .coin-yellow{background:#f6eac7;color:#8b6939}
+    .coin-green{background:#e3ebe3;color:#437063}
+    .hero-detail p{font-size:11px;line-height:1.65;margin:0;color:var(--muted)}
+    .hero-detail strong{font-size:12px;font-weight:600;color:var(--ink)}
+    .demo-shell{position:relative}
+    .demo-topline{display:flex;justify-content:space-between;align-items:center;padding:0 11px;margin-bottom:14px;font-size:10px;font-weight:650;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted)}
+    .demo-topline>span{display:flex;align-items:center;gap:6px}
+    .demo-topline .dot{width:5px;height:5px;background:#879576}
+    .demo-card{background:var(--white);border:1px solid #dcded2;border-radius:var(--radius);padding:26px;box-shadow:var(--shadow)}
+    .demo-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px}
+    .demo-header h2{font-size:23px;font-weight:620;letter-spacing:-.8px;line-height:1.2;margin:0 0 6px}
+    .demo-header p{font-size:11px;color:var(--muted);margin:0}
+    .chain-pill{display:flex;align-items:center;gap:5px;flex-shrink:0;background:#f0f1e9;border:1px solid #e4e6db;border-radius:20px;padding:6px 10px;font-size:10px;font-weight:600}
+    .chain-diamond{width:7px;height:10px;background:#8b9380;clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
+    .selection-bar{display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--muted);border-bottom:1px solid var(--line);padding-bottom:10px}
+    .selection-actions{display:flex;gap:13px}
+    .small-button{padding:2px 0;background:none;border:0;font-size:10px;font-weight:600;color:var(--accent)}
+    .small-button:hover{text-decoration:underline}
+    .asset-list{margin:0;padding:0;list-style:none}
+    .asset-row{display:grid;grid-template-columns:20px 36px minmax(0,1fr) 120px;align-items:center;gap:10px;padding:14px 0;border-bottom:1px solid #e8e8df}
+    .asset-row input[type=checkbox]{accent-color:var(--sage-ink);width:16px;height:16px;margin:0;cursor:pointer}
+    .asset-token{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font:600 15px/1 Georgia,serif}
+    .asset-weth{background:#e5eaf0;color:#677a92}
+    .asset-dai{background:#f6eac7;color:#9b7835}
+    .asset-usdt{background:#e4ece4;color:#4c7c6d}
+    .asset-wbtc{background:#f4e2ce;color:#a57042}
+    .asset-name{font-size:12px;font-weight:700;line-height:1.5}
+    .asset-balance{font-size:10px;color:var(--muted);white-space:nowrap}
+    .amount-cell{text-align:right}
+    .amount-wrap{display:flex;align-items:center;justify-content:flex-end;gap:5px}
+    .amount-input{width:90px;min-width:0;text-align:right;border:1px solid #d9ddd1;background:#fbfcf8;border-radius:6px;padding:4px 6px;color:var(--ink);font-size:12px;font-weight:600;line-height:1.4}
+    .amount-input:disabled{background:#f4f4ef;color:#8c9387;border-color:transparent}
+    .amount-input[aria-invalid=true]{border-color:var(--error);background:#fff4ef}
+    .max-button{font-size:8px;letter-spacing:.4px;text-transform:uppercase;border:0;background:none;color:var(--muted);padding:4px 0}
+    .max-button:hover{color:var(--accent)}
+    .asset-value{font-size:10px;line-height:1.6;color:var(--muted);margin-top:3px}
+    .row-error{font-size:10px;color:var(--error);grid-column:2/-1;margin:0;line-height:1.5}
+    .asset-row.is-unselected .asset-token,.asset-row.is-unselected .asset-name,.asset-row.is-unselected .asset-balance{opacity:.5}
+    .destination-divider{display:flex;align-items:center;justify-content:center;height:30px;color:#9ca494}
+    .result-box{background:var(--ink);border-radius:15px;padding:18px 19px;color:var(--white)}
+    .result-top{display:flex;justify-content:space-between;align-items:center;font-size:10px;color:#c2c9bb}
+    .result-output{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:9px}
+    .output-number{font-size:31px;line-height:1.2;letter-spacing:-1.2px;font-variant-numeric:tabular-nums}
+    .output-token{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600}
+    .usdc-icon{width:26px;height:26px;border-radius:50%;background:#e7ecde;color:#4a5a40;display:grid;place-items:center;font-size:15px;font-family:Georgia,serif}
+    .result-bottom{font-size:10px;color:#bac4b2;border-top:1px solid #4c5647;margin-top:14px;padding-top:9px;display:flex;justify-content:space-between;gap:12px}
+    .cost-line{display:flex;justify-content:space-between;gap:14px;font-size:10px;color:var(--muted);margin:14px 1px 5px}
+    .cost-line strong{font-weight:600;color:var(--ink);white-space:nowrap}
+    .cost-note{font-size:9px;color:var(--muted);margin:0 1px 15px;line-height:1.5}
+    .review-button{width:100%;border-radius:10px;min-height:43px;font-size:12px}
+    .demo-caption{font-size:9px;text-align:center;color:var(--muted);line-height:1.6;margin:11px 10px 0}
+    .rate-details{font-size:10px;color:var(--muted);margin-top:14px}
+    .rate-details summary{cursor:pointer;width:max-content;margin:auto;text-underline-offset:3px}
+    .rate-details[open]{background:#eeefe6;padding:12px 14px;border-radius:10px}
+    .rate-details p{margin:10px 0 0;line-height:1.7}
+    .rate-details ul{padding-left:15px;margin:7px 0}
+    .section{padding:76px 0;border-top:1px solid var(--line)}
+    .section-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:40px;margin-bottom:38px}
+    .section-heading h2,.project h2,.faq-title h2{font-family:Georgia,"Times New Roman",serif;font-size:43px;line-height:1.15;font-weight:400;letter-spacing:-1.5px;margin:12px 0 0}
+    .section-heading>p{max-width:320px;font-size:13px;color:var(--muted);margin:30px 0 0}
+    .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+    .step{padding:27px 28px 26px;background:#f0f0e6;border:1px solid #e4e5da;border-radius:17px}
+    .step-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px}
+    .step-number{font-size:10px;letter-spacing:1px;color:var(--muted)}
+    .step-icon{width:32px;height:32px;color:#7d8871}
+    .step h3{font-size:17px;font-weight:600;letter-spacing:-.3px;margin:0 0 8px}
+    .step p{font-size:12px;line-height:1.8;margin:0;color:var(--muted)}
+    .steps-footnote{font-size:10px;color:var(--muted);margin:17px 0 0}
+    .project{display:grid;grid-template-columns:1fr 1fr;gap:84px;align-items:start}
+    .project-copy>p{font-size:13px;line-height:1.9;color:var(--muted);max-width:440px;margin:24px 0}
+    .project-copy a{font-size:12px;font-weight:600}
+    .status-tag{display:inline-flex;align-items:center;gap:8px;background:var(--peach);padding:5px 11px;border-radius:30px;color:#995137;font-size:10px;font-weight:650}
+    .roadmap{list-style:none;margin:4px 0 0;padding:0}
+    .roadmap li{display:grid;grid-template-columns:27px 1fr;gap:14px;padding:22px 0;border-bottom:1px solid var(--line)}
+    .roadmap li:first-child{padding-top:0}
+    .roadmap li:last-child{border-bottom:0}
+    .roadmap-dot{display:grid;place-items:center;width:26px;height:26px;border:1px solid #c5cbbc;border-radius:50%;color:var(--muted);font-size:10px;margin-top:2px}
+    .roadmap-dot.current{background:var(--sage);border-color:#b5c0a8;color:var(--sage-ink)}
+    .roadmap h3{display:flex;align-items:center;gap:11px;flex-wrap:wrap;font-size:13px;font-weight:650;margin:0 0 5px}
+    .roadmap h3 span{font-size:9px;font-weight:400;text-transform:uppercase;letter-spacing:.7px;color:var(--muted)}
+    .roadmap p{font-size:12px;line-height:1.8;color:var(--muted);margin:0}
+    .faq-section{display:grid;grid-template-columns:1fr 1.3fr;gap:80px}
+    .faq-title p{color:var(--muted);font-size:13px;max-width:265px;margin:20px 0}
+    .faq-list details{border-bottom:1px solid var(--line);padding:19px 0}
+    .faq-list details:first-child{padding-top:0}
+    .faq-list summary{font-size:13px;font-weight:600;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:20px}
+    .faq-list summary::-webkit-details-marker{display:none}
+    .faq-list summary::after{content:"+";font-size:20px;font-weight:400;color:var(--muted)}
+    .faq-list details[open] summary::after{content:"−"}
+    .faq-list p{font-size:12px;color:var(--muted);line-height:1.9;margin:13px 32px 0 0}
+    .closing{background:var(--sage);border-radius:22px;padding:35px 38px;display:flex;align-items:center;justify-content:space-between;gap:25px;margin:0 0 62px}
+    .closing h2{font:400 32px/1.2 Georgia,serif;letter-spacing:-.8px;margin:0 0 7px}
+    .closing p{font-size:12px;color:#66705f;margin:0}
+    footer{border-top:1px solid var(--line);padding:28px 0 32px}
+    .footer-main{display:flex;align-items:center;justify-content:space-between;gap:25px}
+    footer .brand{font-size:18px;letter-spacing:-.6px}
+    footer .brand-mark{width:30px;height:30px}
+    .footer-links{display:flex;flex-wrap:wrap;align-items:center;gap:22px;font-size:11px;color:var(--muted)}
+    .footer-links a{text-decoration:none}
+    .footer-links a:hover{color:var(--accent)}
+    .footer-note{font-size:10px;color:var(--muted);margin:17px 0 0}
+    dialog{border:1px solid var(--line);border-radius:22px;padding:0;background:var(--white);color:var(--ink);width:min(480px,calc(100% - 32px));max-height:calc(100dvh - 40px);box-shadow:0 20px 100px #18201430}
+    dialog::backdrop{background:#252c2469;backdrop-filter:blur(4px)}
+    .dialog-content{padding:28px}
+    .dialog-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .dialog-top .eyebrow{font-size:9px}
+    .close-button{border:0;background:var(--paper);border-radius:50%;width:30px;height:30px;display:grid;place-items:center;color:var(--muted)}
+    .dialog-content h2{font:400 32px/1.2 Georgia,serif;letter-spacing:-1px;margin:17px 0 12px}
+    .dialog-intro{font-size:12px;line-height:1.8;color:var(--muted);margin:0 0 20px}
+    .review-list{padding:0;margin:0 0 20px;list-style:none}
+    .review-list li{display:flex;justify-content:space-between;gap:15px;font-size:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+    .review-total{background:var(--sage);border-radius:12px;padding:16px;margin-bottom:18px}
+    .review-total p{font-size:10px;color:var(--sage-ink);margin:0 0 4px}
+    .review-total strong{font-size:25px;font-weight:600;letter-spacing:-.8px}
+    .review-meta{font-size:11px;line-height:1.8;color:var(--muted);margin:0 0 20px}
+    .dialog-actions{display:flex;gap:10px;flex-wrap:wrap}
+    .dialog-actions .button{border-radius:9px;flex:1;white-space:nowrap;font-size:12px}
+    .complete-icon{display:grid;place-items:center;width:54px;height:54px;border-radius:50%;background:var(--sage);color:var(--sage-ink);margin:22px 0}
+    .noscript{background:var(--peach);padding:20px;border:1px solid #dab9a4;font-size:14px}
+    @media(min-width:1400px){.hero{padding-top:80px;padding-bottom:85px}}
+    @media(max-width:1000px){.hero{gap:35px}.hero h1{font-size:65px}.demo-card{padding:21px}.project{gap:45px}.faq-section{gap:45px}.asset-row{grid-template-columns:18px 32px minmax(0,1fr) 112px;gap:8px}.asset-token{width:32px;height:32px}.amount-input{width:82px}}
+    @media(max-width:780px){.wrap{width:calc(100% - 40px)}.site-header{height:80px}.brand{font-size:21px}nav{gap:18px}nav .desktop-link{display:none}.hero{grid-template-columns:1fr;gap:40px;padding:45px 0 54px}.hero-copy{text-align:center;padding:0}.hero-copy>.eyebrow{justify-content:center}.hero h1{font-size:clamp(57px,10vw,75px);letter-spacing:-3px;margin:23px 0}.hero-copy>p{margin-inline:auto;font-size:15px;max-width:420px}.hero-actions{justify-content:center}.hero-note{max-width:none!important}.hero-detail{display:none}.demo-shell{width:min(490px,100%);margin-inline:auto}.demo-card{padding:24px}.asset-row{grid-template-columns:20px 36px minmax(0,1fr) 120px;gap:10px}.asset-token{width:36px;height:36px}.amount-input{width:90px}.section{padding:50px 0}.section-heading{display:block;margin-bottom:28px}.section-heading>p{margin:18px 0 0;max-width:500px}.section-heading h2,.project h2,.faq-title h2{font-size:35px}.steps{grid-template-columns:1fr;gap:12px}.step{padding:23px}.step-top{margin-bottom:14px}.step p{max-width:520px}.project{grid-template-columns:1fr;gap:28px}.project-copy>p{max-width:560px}.faq-section{grid-template-columns:1fr;gap:25px}.faq-title p{max-width:500px}.closing{padding:28px;align-items:flex-start;margin-bottom:40px}.closing h2{font-size:28px}.footer-main{align-items:flex-start}.footer-links{gap:14px;justify-content:flex-end}}
+    @media(max-width:420px){.wrap{width:calc(100% - 32px)}.nav-button{padding:8px 13px;font-size:11px}.brand{gap:6px;font-size:20px}.brand-mark{width:33px;height:33px}.hero h1{font-size:58px}.demo-card{padding:18px;border-radius:20px}.demo-header h2{font-size:21px}.chain-pill{font-size:9px;padding:5px 8px}.asset-row{grid-template-columns:16px 30px minmax(0,1fr) 106px;gap:8px}.asset-token{width:30px;height:30px}.asset-name{font-size:11px}.asset-balance{font-size:9px}.amount-input{width:79px;font-size:11px}.max-button{font-size:7px}.result-box{padding:15px}.output-number{font-size:29px}.output-token{font-size:12px}.closing{display:block}.closing .button{margin-top:20px}.footer-main{flex-direction:column;gap:18px}.footer-links{justify-content:flex-start}.dialog-content{padding:22px}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important}}
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <svg width="0" height="0" aria-hidden="true" style="position:absolute">
+    <defs>
+      <symbol id="gather-mark" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"><path d="M10 13h7c8 0 8 11 15 11M10 24h22M10 35h7c8 0 8-11 15-11"/></g><rect x="30" y="17" width="8" height="14" rx="3" fill="currentColor"/></symbol>
+      <symbol id="arrow-right" viewBox="0 0 24 24"><path d="M5 12h14m-5-5 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="check" viewBox="0 0 24 24"><path d="m6 12 4 4 8-8" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    </defs>
+  </svg>
+  <div class="wrap">
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="Gatherport home"><svg class="brand-mark" aria-hidden="true"><use href="#gather-mark"/></svg>Gatherport</a>
+      <nav aria-label="Main navigation">
+        <a class="desktop-link" href="#how-it-works">How it works</a>
+        <a class="desktop-link" href="#project">Project</a>
+        <a class="desktop-link" href="#faq">FAQ</a>
+        <a class="nav-button" href="#demo">Explore demo <span aria-hidden="true">↗</span></a>
+      </nav>
+    </header>
+    <main id="main">
+      <section class="hero" id="top" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="dot"></span>A little less wallet clutter</div>
+          <h1 id="hero-title">Bring your<br>tokens<br><em>together.</em></h1>
+          <p>A simpler way to gather selected tokens into USDC. See the whole picture before you confirm.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#demo">Try the demo<svg width="18" height="18" aria-hidden="true"><use href="#arrow-right"/></svg></a>
+            <a class="text-link" href="#how-it-works">How it works</a>
+          </div>
+          <p class="hero-note">Interactive demo. Example data, no wallet required.</p>
+          <div class="hero-detail" aria-hidden="true">
+            <div class="token-stack"><span class="mini-coin coin-blue">W</span><span class="mini-coin coin-yellow">D</span><span class="mini-coin coin-green">T</span></div>
+            <p><strong>Several balances. One destination.</strong><br>A more considered way to clean up your wallet.</p>
+          </div>
+        </div>
+        <div class="demo-shell" id="demo">
+          <div class="demo-topline"><span><span class="dot"></span>Interactive prototype</span><span>01 / Gather</span></div>
+          <section class="demo-card" aria-labelledby="demo-title">
+            <div class="demo-header">
+              <div><h2 id="demo-title">Gather into USDC</h2><p>Your sample wallet · Example balances</p></div>
+              <span class="chain-pill"><span class="chain-diamond" aria-hidden="true"></span>Ethereum</span>
+            </div>
+            <noscript><p class="noscript">Enable JavaScript to use this local demo. All figures below are examples; no live trading is available.</p></noscript>
+            <div class="selection-bar">
+              <span id="selection-label">3 assets selected</span>
+              <div class="selection-actions"><button class="small-button" id="select-all" type="button">Select all</button><button class="small-button" id="reset-demo" type="button">Reset</button></div>
+            </div>
+            <ul class="asset-list" id="asset-list" aria-label="Example wallet assets"></ul>
+            <div class="destination-divider" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24"><path d="M12 5v14m-5-5 5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="result-box" aria-live="polite" aria-atomic="true">
+              <div class="result-top"><span>Example output</span><span>Illustrative preview</span></div>
+              <div class="result-output"><span class="output-number" id="output-amount">499.25</span><span class="output-token"><span class="usdc-icon" aria-hidden="true">$</span>USDC</span></div>
+              <div class="result-bottom"><span id="result-status">3 assets → 1 destination</span><span id="input-value">$500.00 in selected tokens</span></div>
+            </div>
+            <div class="cost-line"><span>Example network cost</span><strong id="network-cost">$3.80 in ETH</strong></div>
+            <p class="cost-note" id="approval-note">2 example approvals + 1 swap. Paid separately; not deducted from USDC.</p>
+            <button class="button button-primary review-button" id="review-demo" type="button">Review demo<svg width="17" height="17" aria-hidden="true"><use href="#arrow-right"/></svg></button>
+            <p class="demo-caption">Synthetic balances, prices and costs. No wallet connection or transaction.</p>
+          </section>
+          <details class="rate-details">
+            <summary>See the example assumptions</summary>
+            <p>This demo uses fixed, invented values for illustration. They are not market prices or executable quotes.</p>
+            <ul>
+              <li>WETH: $2,400 · DAI: $1 · USDT: $1 · WBTC: $64,000.</li>
+              <li>USDC is assumed to equal $1 in this illustration.</li>
+              <li>Example output = selected value × 99.85%, rounded to cents. The 0.15% adjustment is an arbitrary demo assumption, not a provider fee.</li>
+              <li>Demo inputs allow up to 8 decimal places. A selection that rounds to zero output cannot be reviewed. These are demo display limits, not live trade limits.</li>
+              <li>Example network cost = $2.50 for a swap + $0.65 per required example approval, paid separately in ETH.</li>
+              <li>Only WETH has a sufficient example allowance. Actual allowances, token support, quotes and costs must be checked live.</li>
+            </ul>
+          </details>
+        </div>
+      </section>
+      <section class="section" id="how-it-works" aria-labelledby="how-title">
+        <div class="section-heading">
+          <div><div class="eyebrow">Designed to feel straightforward</div><h2 id="how-title">From scattered to settled.</h2></div>
+          <p>A planned wallet flow with one clear destination. The demo lets you explore the selection and review experience.</p>
+        </div>
+        <div class="steps">
+          <article class="step">
+            <div class="step-top"><span class="step-number">01 / CHOOSE</span><svg class="step-icon" viewBox="0 0 36 36" aria-hidden="true"><rect x="5" y="5" width="10" height="10" rx="3" fill="none" stroke="currentColor" stroke-width="1.4"/><rect x="21" y="5" width="10" height="10" rx="3" fill="none" stroke="currentColor" stroke-width="1.4"/><rect x="5" y="21" width="10" height="10" rx="3" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="m22 26 3 3 6-7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+            <h3>Pick what to gather.</h3><p>Choose supported assets and amounts from your wallet. Keep the balances you want to keep.</p>
+          </article>
+          <article class="step">
+            <div class="step-top"><span class="step-number">02 / PREVIEW</span><svg class="step-icon" viewBox="0 0 36 36" aria-hidden="true"><path d="M7 9h22M7 18h13M7 27h10m7-3 4 4 6-7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+            <h3>See the full picture.</h3><p>Review the USDC output, quote details and separate network costs before deciding to proceed.</p>
+          </article>
+          <article class="step">
+            <div class="step-top"><span class="step-number">03 / CONFIRM</span><svg class="step-icon" viewBox="0 0 36 36" aria-hidden="true"><path d="m18 4 12 5v9c0 7-6 11-12 14C12 29 6 25 6 18V9Z" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="m12 18 4 4 8-8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+            <h3>You make the call.</h3><p>The planned live flow will ask you to approve any required token permissions and sign in your wallet.</p>
+          </article>
+        </div>
+        <p class="steps-footnote">Approvals may require separate transactions. Live quotes, token support and wallet execution are planned, not available in this prototype.</p>
+      </section>
+      <section class="section project" id="project" aria-labelledby="project-title">
+        <div class="project-copy">
+          <div class="eyebrow">A focused starting point</div>
+          <h2 id="project-title">Small tool.<br>Clear purpose.</h2>
+          <p>Gatherport is an independent wallet utility in development. We are building a simpler way to choose which tokens to keep, gather selected balances into USDC and understand the outcome before taking action.</p>
+          <p>Our first focus is Ethereum, with clear asset selection, transparent cost breakdowns and control that stays with the wallet owner. The interactive demo is available today; live pricing and wallet execution are planned.</p>
+          <span class="status-tag"><span class="dot"></span>In development</span><p><a href="project.html">Read the project overview <span aria-hidden="true">↗</span></a></p>
+        </div>
+        <ol class="roadmap" aria-label="Development stages">
+          <li><span class="roadmap-dot current"><svg width="16" height="16" aria-hidden="true"><use href="#check"/></svg></span><div><h3>Interactive experience<span>Available now</span></h3><p>Select example assets, adjust amounts and review a simulated consolidation into USDC.</p></div></li>
+          <li><span class="roadmap-dot">2</span><div><h3>Quote integration<span>Planned</span></h3><p>Add current prices, eligible assets, itemized costs and clear handling of expired or unavailable quotes.</p></div></li>
+          <li><span class="roadmap-dot">3</span><div><h3>Wallet execution<span>Planned</span></h3><p>Add wallet connection, allowance checks and user-signed execution after integration and validation.</p></div></li>
+        </ol>
+      </section>
+      <section class="section faq-section" id="faq" aria-labelledby="faq-title">
+        <div class="faq-title"><div class="eyebrow">A few useful details</div><h2 id="faq-title">Before you try it.</h2><p>Where the prototype stands, and what comes next.</p></div>
+        <div class="faq-list">
+          <details open><summary>Can I swap real tokens here?</summary><p>Not yet. This is an interactive prototype with synthetic data. It does not connect a wallet, request quotes, ask for approvals or execute transactions.</p></details>
+          <details><summary>Which wallets and tokens will be supported?</summary><p>We are starting with Ethereum. The first live version is planned around compatible wallets and eligible tokens with a usable route into USDC. The demo assets are illustrative; the supported list will be established through testing.</p></details>
+          <details><summary>Will I need to approve each token?</summary><p>A live flow may need a separate approval for each sell token that does not already have sufficient allowance. Gatherport plans to show these requirements before execution. The current demo only illustrates that review.</p></details>
+          <details><summary>Why start with USDC?</summary><p>One destination makes the review easier to understand. The first planned workflow focuses on consolidating selected Ethereum balances into USDC in the same wallet. More destinations can be considered after the core flow is validated.</p></details>
+          <details><summary>Does this demo collect wallet information?</summary><p>No. This demo uses hard-coded example data in your browser. It has no wallet connection, account registration, analytics, cookies or application-level network requests. A hosting provider may process routine access logs when the page is published.</p></details>
+        </div>
+      </section>
+      <section class="closing" aria-labelledby="closing-title"><div><h2 id="closing-title">A clearer wallet starts here.</h2><p>Try a few selections. Find your own way to bring them together.</p></div><a class="button button-dark" href="#demo">Explore the demo<svg width="18" height="18" aria-hidden="true"><use href="#arrow-right"/></svg></a></section>
+    </main>
+    <footer>
+      <div class="footer-main">
+        <a class="brand" href="#top"><svg class="brand-mark" aria-hidden="true"><use href="#gather-mark"/></svg>Gatherport</a>
+        <div class="footer-links"><a href="project.html">Project overview</a><a href="#faq">FAQ</a><a href="brand/gatherport-avatar-512.png" download="gatherport-avatar-512.png">Brand asset</a><a id="github-link" hidden target="_blank" rel="noopener noreferrer">GitHub</a><a id="x-link" hidden target="_blank" rel="noopener noreferrer">X</a><a id="telegram-link" hidden target="_blank" rel="noopener noreferrer">Telegram</a></div>
+      </div>
+      <p class="footer-note">Gatherport · In development · This demo uses example data. Live trading is not available.</p>
+    </footer>
+  </div>
+  <dialog id="review-dialog" aria-labelledby="review-title">
+    <div class="dialog-content">
+      <div class="dialog-top"><span class="eyebrow"><span class="dot"></span>Example walkthrough</span><button class="close-button" id="close-review" type="button" aria-label="Close review">✕</button></div>
+      <div id="review-content">
+        <h2 id="review-title">A moment to review.</h2>
+        <p class="dialog-intro">Here is what your sample selection looks like. These are synthetic figures, not an executable quote.</p>
+        <ul class="review-list" id="review-assets"></ul>
+        <div class="review-total"><p>Example output</p><strong id="review-output"></strong></div>
+        <p class="review-meta" id="review-cost"></p>
+        <div class="dialog-actions"><button class="button button-plain" id="edit-selection" type="button">Edit selection</button><button class="button button-primary" id="finish-demo" type="button">Finish walkthrough</button></div>
+        <p class="demo-caption">This button completes the demo. Nothing will be signed or sent.</p>
+      </div>
+      <div id="complete-content" hidden>
+        <div class="complete-icon"><svg width="27" height="27" aria-hidden="true"><use href="#check"/></svg></div>
+        <h2 id="complete-title">Preview complete.</h2>
+        <p class="dialog-intro">You have explored Gatherport's selection and review flow. No tokens moved, no wallet was connected, and no transaction was created.</p>
+        <div class="dialog-actions"><button class="button button-dark" id="try-again" type="button">Try another selection</button></div>
+      </div>
+    </div>
+  </dialog>
+  <script>
+    "use strict";
+    // Public project links. Add verified social URLs when they are available.
+    // Empty values keep social links hidden. Never store credentials in this file.
+    const SITE_CONFIG = {
+      githubUrl: "https://github.com/DeCentBlip/gatherport-web",
+      xUrl: "",
+      telegramUrl: "",
+      siteUrl: "https://decentblip.github.io/gatherport-web/"
+    };
+
+    // SYNTHETIC FIXTURES: these values are not live rates, quotes or fees.
+    const ASSETS = [
+      {symbol:"WETH",mark:"W",balance:0.12,rate:2400,amount:"0.10",selected:true,approval:false,className:"asset-weth"},
+      {symbol:"DAI",mark:"D",balance:185,rate:1,amount:"185",selected:true,approval:true,className:"asset-dai"},
+      {symbol:"USDT",mark:"T",balance:93.5,rate:1,amount:"75",selected:true,approval:true,className:"asset-usdt"},
+      {symbol:"WBTC",mark:"B",balance:0.002,rate:64000,amount:"0.002",selected:false,approval:true,className:"asset-wbtc"}
+    ];
+    const DEMO_ADJUSTMENT = 0.0015;
+    const SWAP_COST = 2.50;
+    const APPROVAL_COST = 0.65;
+    const state = ASSETS.map(asset => ({...asset}));
+    const money = new Intl.NumberFormat("en-US",{style:"currency",currency:"USD",minimumFractionDigits:2,maximumFractionDigits:2});
+    const amountFormat = new Intl.NumberFormat("en-US",{maximumFractionDigits:8});
+    const outputFormat = new Intl.NumberFormat("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
+    const byId = id => document.getElementById(id);
+
+    function validateAmount(raw,balance) {
+      const trimmed = raw.trim();
+      if (!/^(?:\d+\.?\d*|\.\d+)$/.test(trimmed)) return {error:"Enter a valid token amount."};
+      if ((trimmed.split(".")[1] || "").length > 8) return {error:"Use up to 8 decimal places in this demo."};
+      const amount = Number(trimmed);
+      if (!Number.isFinite(amount) || amount <= 0) return {error:"Enter an amount greater than zero."};
+      if (amount > balance) return {error:"Amount exceeds the example balance."};
+      return {amount,error:""};
+    }
+
+    function calculateSelection(assets) {
+      const chosen = assets.filter(asset => asset.selected);
+      const checked = chosen.map(asset => ({...asset,...validateAmount(asset.amount,asset.balance)}));
+      if (!chosen.length) return {valid:false,empty:true,count:0,total:0,output:0,approvals:0,cost:0,assets:[]};
+      if (checked.some(asset => asset.error)) return {valid:false,empty:false,count:chosen.length,total:0,output:0,approvals:0,cost:0,assets:checked};
+      const total = checked.reduce((sum,asset) => sum+asset.amount*asset.rate,0);
+      const output = Math.round((total*(1-DEMO_ADJUSTMENT)+Number.EPSILON)*100)/100;
+      if (output === 0) return {valid:false,empty:false,tooSmall:true,count:checked.length,total,output:0,approvals:0,cost:0,assets:checked};
+      const approvals = checked.filter(asset => asset.approval).length;
+      const cost = SWAP_COST+approvals*APPROVAL_COST;
+      return {valid:true,empty:false,count:checked.length,total,output,approvals,cost,assets:checked};
+    }
+
+    function createAssetRows() {
+      const list = byId("asset-list");
+      state.forEach((asset,index) => {
+        const row = document.createElement("li");
+        row.className = "asset-row";
+        row.id = "row-"+index;
+        row.innerHTML = '<input type="checkbox" id="select-'+index+'" aria-label="Select '+asset.symbol+'">'+
+          '<span class="asset-token '+asset.className+'" aria-hidden="true">'+asset.mark+'</span>'+
+          '<div><label class="asset-name" for="select-'+index+'">'+asset.symbol+'</label><div class="asset-balance">Balance: '+amountFormat.format(asset.balance)+'</div></div>'+
+          '<div class="amount-cell"><div class="amount-wrap"><label class="sr-only" for="amount-'+index+'">'+asset.symbol+' amount</label><input class="amount-input" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" maxlength="24" id="amount-'+index+'" aria-describedby="error-'+index+'"><button class="max-button" type="button" id="max-'+index+'" aria-label="Use maximum '+asset.symbol+' amount">Max</button></div><div class="asset-value" id="value-'+index+'"></div></div>'+
+          '<p class="row-error" id="error-'+index+'" hidden></p>';
+        list.appendChild(row);
+        byId("select-"+index).addEventListener("change",event => {asset.selected=event.target.checked;update();});
+        byId("amount-"+index).addEventListener("input",event => {asset.amount=event.target.value;update();});
+        byId("max-"+index).addEventListener("click",() => {asset.amount=String(asset.balance);byId("amount-"+index).value=asset.amount;update();});
+      });
+    }
+
+    function update() {
+      state.forEach((asset,index) => {
+        const input = byId("amount-"+index);
+        const checkbox = byId("select-"+index);
+        checkbox.checked = asset.selected;
+        input.disabled = !asset.selected;
+        byId("max-"+index).disabled = !asset.selected;
+        byId("row-"+index).classList.toggle("is-unselected",!asset.selected);
+        const validation = asset.selected ? validateAmount(asset.amount,asset.balance) : {error:""};
+        input.setAttribute("aria-invalid",validation.error ? "true" : "false");
+        byId("error-"+index).hidden = !validation.error;
+        byId("error-"+index).textContent = validation.error || "";
+        byId("value-"+index).textContent = !asset.selected ? "Not selected" : validation.error ? "Check amount" : money.format(validation.amount*asset.rate);
+      });
+      const result = calculateSelection(state);
+      byId("selection-label").textContent = result.count+" asset"+(result.count===1?"":"s")+" selected";
+      byId("select-all").textContent = state.every(asset=>asset.selected) ? "Clear all" : "Select all";
+      byId("output-amount").textContent = result.valid ? outputFormat.format(result.output) : "—";
+      byId("input-value").textContent = result.valid ? money.format(result.total)+" in selected tokens" : "No preview available";
+      byId("result-status").textContent = result.valid ? result.count+" asset"+(result.count===1?"":"s")+" → 1 destination" : result.empty ? "Select at least one asset" : result.tooSmall ? "Increase the example amounts" : "Check your selected amounts";
+      byId("network-cost").textContent = result.valid ? money.format(result.cost)+" in ETH" : "—";
+      byId("approval-note").textContent = result.valid ? result.approvals+" example approval"+(result.approvals===1?"":"s")+" + 1 swap. Paid separately; not deducted from USDC." : result.tooSmall ? "The selected value is too small for this demo's two-decimal output." : "Choose valid amounts to see example costs and approval steps.";
+      byId("review-demo").disabled = !result.valid;
+    }
+
+    function restoreDefaults() {
+      state.forEach((asset,index) => {
+        asset.selected=ASSETS[index].selected;
+        asset.amount=ASSETS[index].amount;
+        byId("amount-"+index).value=asset.amount;
+      });
+      update();
+    }
+
+    const dialog = byId("review-dialog");
+    function closeReview() {
+      dialog.close();
+      byId("review-demo").focus({preventScroll:true});
+    }
+    byId("review-demo").addEventListener("click",() => {
+      const result=calculateSelection(state);
+      if(!result.valid) return;
+      byId("review-assets").replaceChildren();
+      result.assets.forEach(asset => {
+        const row=document.createElement("li");
+        const token=document.createElement("span");
+        const value=document.createElement("strong");
+        token.textContent=asset.symbol;
+        value.textContent=amountFormat.format(asset.amount)+" · "+money.format(asset.amount*asset.rate);
+        row.append(token,value);
+        byId("review-assets").appendChild(row);
+      });
+      byId("review-output").textContent=outputFormat.format(result.output)+" USDC";
+      byId("review-cost").textContent="Example network cost: "+money.format(result.cost)+" paid separately in ETH. This assumes "+result.approvals+" example approval"+(result.approvals===1?"":"s")+" and 1 swap. The example output includes an arbitrary 0.15% quote adjustment; it is not a provider fee.";
+      byId("review-content").hidden=false;
+      byId("complete-content").hidden=true;
+      dialog.setAttribute("aria-labelledby","review-title");
+      dialog.showModal();
+      byId("close-review").focus();
+    });
+    ["close-review","edit-selection","try-again"].forEach(id=>byId(id).addEventListener("click",closeReview));
+    dialog.addEventListener("cancel",event => {event.preventDefault();closeReview();});
+    byId("finish-demo").addEventListener("click",() => {
+      byId("review-content").hidden=true;
+      byId("complete-content").hidden=false;
+      dialog.setAttribute("aria-labelledby","complete-title");
+      byId("try-again").focus();
+    });
+    byId("select-all").addEventListener("click",() => {
+      const shouldSelect=!state.every(asset=>asset.selected);
+      state.forEach(asset=>{asset.selected=shouldSelect;});
+      update();
+    });
+    byId("reset-demo").addEventListener("click",restoreDefaults);
+
+    function validPublicUrl(raw) {
+      if(typeof raw!=="string" || !raw.trim()) return "";
+      try {const url=new URL(raw);return url.protocol==="https:" && !url.username && !url.password ? url.href : "";} catch {return "";}
+    }
+    [["githubUrl","github-link"],["xUrl","x-link"],["telegramUrl","telegram-link"]].forEach(([key,id])=>{
+      const url=validPublicUrl(SITE_CONFIG[key]);
+      if(url){byId(id).href=url;byId(id).hidden=false;}
+    });
+    const canonical=validPublicUrl(SITE_CONFIG.siteUrl);
+    if(canonical){
+      const link=document.createElement("link");link.rel="canonical";link.href=canonical;document.head.appendChild(link);
+      const meta=document.createElement("meta");meta.setAttribute("property","og:url");meta.content=canonical;document.head.appendChild(meta);
+    }
+    createAssetRows();
+    restoreDefaults();
+  </script>
+</body>
+</html>
